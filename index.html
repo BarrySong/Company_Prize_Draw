@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CypressTel 2025 年度盛典</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+            },
+            colors: {
+              brand: {
+                primary: '#0f6cff',
+                secondary: '#1e22aa',
+                accent: '#00d6bb',
+                warning: '#ffa600',
+                surface: '#050810',
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      :root {
+        --brand-blue: #0f6cff;
+        --brand-glow: rgba(15, 108, 255, 0.4);
+      }
+      body {
+        background: #050810;
+        color: #fff;
+        margin: 0;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden; /* Prevent global scroll */
+        position: fixed;
+      }
+      
+      #particles-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(40px) saturate(150%);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      }
+      .hero-gradient {
+        background: radial-gradient(circle at 50% -20%, var(--brand-glow) 0%, transparent 70%);
+      }
+      .shimmer {
+        position: relative;
+        overflow: hidden;
+      }
+      .shimmer::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
+        transform: rotate(45deg);
+        animation: shimmer 4s infinite linear;
+      }
+      @keyframes shimmer {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+      }
+      .perspective-stage {
+        perspective: 1000px;
+      }
+      .floating {
+        animation: float 6s ease-in-out infinite;
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0) rotateX(0deg); }
+        50% { transform: translateY(-20px) rotateX(2deg); }
+      }
+      .liquid-input {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+      }
+      .liquid-input:focus {
+        border-color: #0f6cff;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(15, 108, 255, 0.2);
+      }
+
+      /* Responsive adaptation */
+      @media (max-height: 800px) {
+        .scale-adaptive {
+          transform: scale(0.9);
+          transform-origin: center top;
+        }
+      }
+      @media (max-height: 700px) {
+        .scale-adaptive {
+          transform: scale(0.8);
+          transform-origin: center top;
+        }
+      }
+    </style>
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@^19.2.3",
+        "react/": "https://esm.sh/react@^19.2.3/",
+        "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+        "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+        "canvas-confetti": "https://esm.sh/canvas-confetti@^1.9.4"
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <canvas id="particles-canvas"></canvas>
+    <div id="root" class="relative z-10 h-full w-full"></div>
+    <script>
+      const canvas = document.getElementById('particles-canvas');
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      const resize = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      };
+      window.addEventListener('resize', resize);
+      resize();
+
+      class Particle {
+        constructor() {
+          this.reset();
+        }
+        reset() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.size = Math.random() * 1.5 + 0.5;
+          this.speedX = (Math.random() - 0.5) * 0.5;
+          this.speedY = (Math.random() - 0.5) * 0.5;
+          this.opacity = Math.random() * 0.5 + 0.1;
+        }
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+        }
+        draw() {
+          ctx.fillStyle = `rgba(15, 108, 255, ${this.opacity})`;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      for (let i = 0; i < 150; i++) particles.push(new Particle());
+      const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(animate);
+      };
+      animate();
+    </script>
+  </body>
+</html>
