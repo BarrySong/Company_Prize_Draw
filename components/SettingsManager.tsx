@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout as LayoutIcon, Image as ImageIcon, Type, Save, CheckCircle, Command, Sparkles, Calendar } from 'lucide-react';
 import { SiteConfig } from '../types';
 
@@ -10,6 +10,11 @@ interface SettingsManagerProps {
 export const SettingsManager: React.FC<SettingsManagerProps> = ({ siteConfig, onUpdate }) => {
   const [tempConfig, setTempConfig] = useState<SiteConfig>(siteConfig);
   const [showSuccess, setShowSuccess] = useState(false);
+
+  // 确保当外部 siteConfig 变化时同步内部临时状态
+  useEffect(() => {
+    setTempConfig(siteConfig);
+  }, [siteConfig]);
 
   const handleSave = () => {
     onUpdate(tempConfig);
@@ -51,14 +56,14 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ siteConfig, on
           </label>
           <input
             type="text"
-            value={tempConfig.brandName}
-            onChange={(e) => setTempConfig({ ...tempConfig, brandName: e.target.value })}
+            value={tempConfig.brandName || ''}
+            onChange={(e) => setTempConfig(prev => ({ ...prev, brandName: e.target.value }))}
             placeholder="例如: CYPRESSTEL"
-            className="liquid-input w-full px-6 py-4 rounded-2xl font-black text-xl tracking-tight focus:ring-2 ring-brand-primary/50 transition-all bg-white/5 border-white/10"
+            className="w-full px-6 py-4 rounded-2xl font-black text-xl tracking-tight focus:ring-2 ring-brand-primary/50 transition-all bg-white/5 border border-white/10 text-white outline-none"
           />
         </div>
 
-        {/* Event Name Input - NEW */}
+        {/* Event Name Input */}
         <div className="space-y-3 relative z-10">
           <label className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
             <Calendar size={14} className="text-brand-primary" />
@@ -66,10 +71,10 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ siteConfig, on
           </label>
           <input
             type="text"
-            value={tempConfig.eventName}
-            onChange={(e) => setTempConfig({ ...tempConfig, eventName: e.target.value })}
+            value={tempConfig.eventName || ''}
+            onChange={(e) => setTempConfig(prev => ({ ...prev, eventName: e.target.value }))}
             placeholder="例如: Annual Gala 2025"
-            className="liquid-input w-full px-6 py-4 rounded-2xl font-bold text-sm tracking-widest focus:ring-2 ring-brand-primary/50 transition-all bg-white/5 border-white/10 uppercase"
+            className="w-full px-6 py-4 rounded-2xl font-bold text-sm tracking-widest focus:ring-2 ring-brand-primary/50 transition-all bg-white/5 border border-white/10 text-white outline-none uppercase"
           />
         </div>
 

@@ -61,7 +61,7 @@ export const LotteryMachine: React.FC<LotteryMachineProps> = ({
 
   const hasPrizes = prizes && prizes.length > 0;
 
-  // FIX: Added default value 0 for offset to satisfy argument requirement
+  // Added default value 0 for offset to satisfy argument requirement
   const getPrizeAt = (offset: number = 0) => {
     if (!hasPrizes) return null;
     const index = (activePrizeIndex + offset + prizes.length) % prizes.length;
@@ -206,7 +206,7 @@ export const LotteryMachine: React.FC<LotteryMachineProps> = ({
   const navigatePrize = (direction: number) => {
     if (isRunning || !hasPrizes) return;
     initAudio();
-    // FIX: Passing 'select' as required argument for playSound
+    // Added 'select' as required argument for playSound
     playSound('select');
     setActivePrizeIndex(prev => (prev + direction + prizes.length) % prizes.length);
   };
