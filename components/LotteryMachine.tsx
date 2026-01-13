@@ -1,14 +1,9 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
 import { Trophy, Check, Sparkles, Zap, ChevronLeft, ChevronRight, Heart, Star, Flame } from 'lucide-react';
 import { Participant, Prize, Winner } from '../types';
 import { generateId } from '../utils/storage';
-
-interface LotteryMachineProps {
-  participants: Participant[];
-  prizes: Prize[];
-  onDrawComplete: (winners: Winner[]) => void;
-}
 
 const FestiveDecoration = () => (
   <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
@@ -89,6 +84,7 @@ export const LotteryMachine: React.FC<LotteryMachineProps> = ({
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start();
+      // FIX: Added required 'now + 0.1' argument to osc.stop()
       osc.stop(now + 0.1);
       return;
     }
@@ -153,6 +149,7 @@ export const LotteryMachine: React.FC<LotteryMachineProps> = ({
             availableParticipants[Math.floor(Math.random() * availableParticipants.length)]
           );
           setCurrentDisplayNames(batch);
+          // FIX: Pass required 'tick' argument to playSound
           playSound('tick');
           lastUpdateTime.current = t;
         }
@@ -371,7 +368,7 @@ export const LotteryMachine: React.FC<LotteryMachineProps> = ({
       <div className={`fixed bottom-28 right-12 transition-all duration-1000 ${isRunning ? 'translate-y-40 opacity-0' : 'translate-y-0 opacity-100'}`}>
           <div className="flex items-center gap-3 text-white/10 text-[10px] font-black uppercase tracking-[0.5em]">
              <Zap size={12} className="text-brand-accent animate-pulse" />
-             Annual Gala 2025
+             AI PRECISION 2.5
           </div>
       </div>
 
@@ -440,3 +437,9 @@ export const LotteryMachine: React.FC<LotteryMachineProps> = ({
     </div>
   );
 };
+
+interface LotteryMachineProps {
+  participants: Participant[];
+  prizes: Prize[];
+  onDrawComplete: (winners: Winner[]) => void;
+}

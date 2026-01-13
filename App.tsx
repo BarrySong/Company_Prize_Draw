@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Layout } from './components/Layout';
 import { LotteryMachine } from './components/LotteryMachine';
@@ -15,7 +16,8 @@ function App() {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [prizes, setPrizes] = useState<Prize[]>([]);
   const [winners, setWinners] = useState<Winner[]>([]);
-  const [siteConfig, setSiteConfig] = useState<SiteConfig>({ brandName: 'CYPRESSTEL', logoUrl: '' });
+  // FIX: Added missing eventName property to initial siteConfig state
+  const [siteConfig, setSiteConfig] = useState<SiteConfig>({ brandName: 'CYPRESSTEL', eventName: 'Annual Gala 2025', logoUrl: '' });
 
   // Initialize
   useEffect(() => {

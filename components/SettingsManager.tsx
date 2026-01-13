@@ -1,7 +1,5 @@
-
 import React, { useState } from 'react';
-// Added Command icon to the imports
-import { Layout as LayoutIcon, Image as ImageIcon, Type, Save, CheckCircle, Command, Sparkles } from 'lucide-react';
+import { Layout as LayoutIcon, Image as ImageIcon, Type, Save, CheckCircle, Command, Sparkles, Calendar } from 'lucide-react';
 import { SiteConfig } from '../types';
 
 interface SettingsManagerProps {
@@ -41,15 +39,15 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ siteConfig, on
         <p className="text-gray-500 font-bold tracking-[0.2em] uppercase text-[10px]">Custom Branding & Visual Identity</p>
       </div>
 
-      {/* Main Settings Card - Moved Upwards */}
-      <div className="w-full glass-card rounded-[40px] p-8 md:p-10 border border-white/10 space-y-8 shadow-2xl relative overflow-hidden">
+      {/* Main Settings Card */}
+      <div className="w-full glass-card rounded-[40px] p-8 md:p-10 border border-white/10 space-y-6 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-brand-primary/5 blur-3xl -mr-16 -mt-16 rounded-full"></div>
         
         {/* Brand Name Input */}
         <div className="space-y-3 relative z-10">
           <label className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
             <Type size={14} className="text-brand-primary" />
-            公司/活动名称
+            主标题 (公司名称)
           </label>
           <input
             type="text"
@@ -57,6 +55,21 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ siteConfig, on
             onChange={(e) => setTempConfig({ ...tempConfig, brandName: e.target.value })}
             placeholder="例如: CYPRESSTEL"
             className="liquid-input w-full px-6 py-4 rounded-2xl font-black text-xl tracking-tight focus:ring-2 ring-brand-primary/50 transition-all bg-white/5 border-white/10"
+          />
+        </div>
+
+        {/* Event Name Input - NEW */}
+        <div className="space-y-3 relative z-10">
+          <label className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+            <Calendar size={14} className="text-brand-primary" />
+            副标题 (活动名称)
+          </label>
+          <input
+            type="text"
+            value={tempConfig.eventName}
+            onChange={(e) => setTempConfig({ ...tempConfig, eventName: e.target.value })}
+            placeholder="例如: Annual Gala 2025"
+            className="liquid-input w-full px-6 py-4 rounded-2xl font-bold text-sm tracking-widest focus:ring-2 ring-brand-primary/50 transition-all bg-white/5 border-white/10 uppercase"
           />
         </div>
 
@@ -130,11 +143,14 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ siteConfig, on
       <div className="grid grid-cols-2 gap-4 w-full opacity-60 max-w-lg pb-12">
         <div className="p-4 bg-white/5 rounded-2xl border border-white/5 flex flex-col items-center">
             <div className="text-[8px] font-black uppercase text-gray-500 mb-2 tracking-widest">当前预览</div>
-            <div className="flex items-center gap-2">
-                <div className="w-6 h-6 bg-brand-primary/20 rounded-md border border-brand-primary/30 flex items-center justify-center overflow-hidden">
-                    {tempConfig.logoUrl ? <img src={tempConfig.logoUrl} className="w-4 h-4 object-contain" /> : <Command size={12} className="text-brand-primary" />}
+            <div className="flex flex-col items-start gap-1">
+                <div className="flex items-center gap-2">
+                    <div className="w-5 h-5 bg-brand-primary/20 rounded-md border border-brand-primary/30 flex items-center justify-center overflow-hidden">
+                        {tempConfig.logoUrl ? <img src={tempConfig.logoUrl} className="w-4 h-4 object-contain" /> : <Command size={10} className="text-brand-primary" />}
+                    </div>
+                    <div className="text-[10px] font-black text-white truncate max-w-[100px] uppercase">{tempConfig.brandName}</div>
                 </div>
-                <div className="text-[11px] font-black text-white truncate max-w-[100px]">{tempConfig.brandName}</div>
+                <div className="text-[7px] text-brand-primary font-black uppercase ml-7 tracking-tighter">{tempConfig.eventName}</div>
             </div>
         </div>
         <div className="p-4 bg-white/5 rounded-2xl border border-white/5 flex flex-col items-center justify-center">

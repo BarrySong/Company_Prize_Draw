@@ -32,9 +32,9 @@ export const Layout: React.FC<LayoutProps> = ({ currentPage, onNavigate, childre
             )}
           </div>
           <div>
-            <h1 className="text-lg font-extrabold tracking-tighter text-white uppercase">{siteConfig.brandName}</h1>
-            <div className="flex items-center gap-2">
-              <span className="text-[9px] text-brand-primary font-black uppercase tracking-[0.3em]">Annual Gala 2025</span>
+            <h1 className="text-lg font-extrabold tracking-tighter text-white uppercase leading-none">{siteConfig.brandName}</h1>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="text-[9px] text-brand-primary font-black uppercase tracking-[0.3em]">{siteConfig.eventName}</span>
               <div className="w-1 h-1 bg-brand-accent rounded-full animate-pulse"></div>
             </div>
           </div>
@@ -42,24 +42,24 @@ export const Layout: React.FC<LayoutProps> = ({ currentPage, onNavigate, childre
 
         <div className="pointer-events-auto flex items-center gap-3">
           {currentPage === 'lottery' && (
-            <div className="flex items-center gap-3 px-4 py-2 bg-white/5 backdrop-blur-2xl rounded-xl border border-white/5 min-w-[120px]">
+            <div className="flex items-center gap-3 px-3 py-1.5 bg-white/5 backdrop-blur-2xl rounded-xl border border-white/5 group hover:bg-white/10 transition-all shadow-lg">
               <div className="text-right">
-                <div className="text-[10px] font-bold text-gray-300">当前奖池</div>
-                <div className="text-[8px] text-brand-primary uppercase font-black">{poolSize} <span>Active</span></div>
+                <div className="text-[9px] font-black text-gray-400 uppercase tracking-tighter">当前奖池</div>
+                <div className="text-[11px] text-brand-primary font-extrabold leading-none tabular-nums">{poolSize} <span className="text-[8px] font-medium opacity-60">ACTIVE</span></div>
               </div>
-              <div className="w-8 h-8 rounded-full border border-brand-primary/30 flex items-center justify-center bg-brand-primary/5">
-                <User className="text-brand-primary" size={14} />
+              <div className="w-7 h-7 rounded-lg border border-brand-primary/30 flex items-center justify-center bg-brand-primary/10 group-hover:scale-110 transition-transform">
+                <User className="text-brand-primary" size={12} />
               </div>
             </div>
           )}
 
-          <div className="flex items-center gap-3 px-4 py-2 bg-white/5 backdrop-blur-2xl rounded-xl border border-white/5 min-w-[120px]">
+          <div className="flex items-center gap-3 px-3 py-1.5 bg-white/5 backdrop-blur-2xl rounded-xl border border-white/5 group hover:bg-white/10 transition-all shadow-lg">
             <div className="text-right">
-              <div className="text-[10px] font-bold text-gray-300">系统就绪</div>
-              <div className="text-[8px] text-brand-accent uppercase font-black">Secure Node 01</div>
+              <div className="text-[9px] font-black text-gray-400 uppercase tracking-tighter">系统状态</div>
+              <div className="text-[11px] text-brand-accent font-extrabold leading-none uppercase">Online</div>
             </div>
-            <div className="w-8 h-8 rounded-full border border-brand-accent/30 flex items-center justify-center bg-brand-accent/5">
-              <Sparkles className="text-brand-accent" size={14} />
+            <div className="w-7 h-7 rounded-lg border border-brand-accent/30 flex items-center justify-center bg-brand-accent/10 group-hover:scale-110 transition-transform">
+              <Sparkles className="text-brand-accent" size={12} />
             </div>
           </div>
         </div>
@@ -72,9 +72,9 @@ export const Layout: React.FC<LayoutProps> = ({ currentPage, onNavigate, childre
         </div>
       </main>
 
-      {/* Floating Minimal Dock */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
-        <nav className="flex items-center gap-3 p-2 bg-black/60 backdrop-blur-3xl rounded-[28px] border border-white/10 shadow-2xl">
+      {/* Floating Minimal Dock - Moved to Bottom Right */}
+      <div className="fixed bottom-8 right-12 z-50">
+        <nav className="flex items-center gap-2 p-2 bg-black/60 backdrop-blur-3xl rounded-full border border-white/10 shadow-2xl">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentPage === item.id;
@@ -82,17 +82,15 @@ export const Layout: React.FC<LayoutProps> = ({ currentPage, onNavigate, childre
               <button
                 key={item.id}
                 onClick={() => onNavigate(item.id as PageView)}
+                title={item.label}
                 className={`
-                  group relative flex items-center gap-3 px-6 py-3 rounded-[20px] transition-all duration-500
+                  group relative flex items-center justify-center w-12 h-12 rounded-full transition-all duration-500
                   ${isActive 
-                    ? 'bg-brand-primary text-white shadow-[0_0_25px_rgba(15,108,255,0.5)] scale-105' 
+                    ? 'bg-brand-primary text-white shadow-[0_0_25px_rgba(15,108,255,0.5)] scale-110' 
                     : 'text-gray-500 hover:text-white hover:bg-white/5'}
                 `}
               >
-                <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
-                <span className={`text-sm font-bold tracking-tight ${isActive ? 'block' : 'hidden group-hover:block'}`}>
-                  {item.label}
-                </span>
+                <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
                 {isActive && (
                   <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full"></div>
                 )}

@@ -25,6 +25,7 @@ export interface Winner {
 export interface SiteConfig {
   logoUrl?: string;
   brandName: string;
+  eventName: string;
 }
 
 export interface AppState {

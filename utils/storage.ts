@@ -12,6 +12,7 @@ const INITIAL_STATE: AppState = {
   winners: [],
   siteConfig: {
     brandName: 'CYPRESSTEL',
+    eventName: 'Annual Gala 2025',
     logoUrl: ''
   }
 };
@@ -23,9 +24,11 @@ export const loadState = (): AppState => {
       return INITIAL_STATE;
     }
     const parsed = JSON.parse(serializedState);
-    // Ensure siteConfig exists for backward compatibility
+    // Ensure siteConfig and eventName exists for backward compatibility
     if (!parsed.siteConfig) {
       parsed.siteConfig = INITIAL_STATE.siteConfig;
+    } else if (!parsed.siteConfig.eventName) {
+      parsed.siteConfig.eventName = INITIAL_STATE.siteConfig.eventName;
     }
     return parsed;
   } catch (err) {
