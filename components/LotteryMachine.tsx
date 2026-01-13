@@ -206,6 +206,7 @@ export const LotteryMachine: React.FC<LotteryMachineProps> = ({
   const navigatePrize = (direction: number) => {
     if (isRunning || !hasPrizes) return;
     initAudio();
+    // FIX: Passing 'select' as required argument for playSound
     playSound('select');
     setActivePrizeIndex(prev => (prev + direction + prizes.length) % prizes.length);
   };
