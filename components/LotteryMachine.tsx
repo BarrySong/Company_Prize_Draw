@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
 import { Trophy, Check, Sparkles, Zap, ChevronLeft, ChevronRight, Heart, Star, Flame } from 'lucide-react';
@@ -240,7 +239,8 @@ export const LotteryMachine: React.FC<LotteryMachineProps> = ({
     <div className="h-full w-full flex flex-col items-center justify-center relative overflow-hidden">
       <FestiveDecoration />
 
-      <div className="w-full flex flex-col items-center justify-center -mt-24 relative z-10">
+      {/* Main Container - Adjusted mt for better spacing from header */}
+      <div className="w-full flex flex-col items-center justify-center -mt-12 relative z-10">
         
         {/* Draw Animation Overlay */}
         <div className={`fixed inset-0 z-[60] bg-[#050810] transition-all duration-1000 flex flex-col items-center justify-center overflow-hidden ${isRunning ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
@@ -397,7 +397,7 @@ export const LotteryMachine: React.FC<LotteryMachineProps> = ({
         )}
       </div>
 
-      {/* FIXED: AI PRECISION 2.5 label positioned further left-bottom, aligned with dock bottom edge */}
+      {/* AI PRECISION 2.5 label positioned further left-bottom, aligned with dock bottom edge */}
       <div className={`fixed bottom-11 left-12 transition-all duration-1000 ${isRunning ? 'translate-y-40 opacity-0' : 'translate-y-0 opacity-100'}`}>
           <div className="flex items-center gap-3 text-white/10 text-[10px] font-black uppercase tracking-[0.5em]">
              <Zap size={12} className="text-brand-accent animate-pulse" />
@@ -411,7 +411,7 @@ export const LotteryMachine: React.FC<LotteryMachineProps> = ({
             <div className="absolute -top-40 -left-40 w-96 h-96 bg-brand-primary/20 blur-[150px] rounded-full"></div>
             <div className="relative mb-10">
                <Trophy size={80} className="text-brand-warning mx-auto mb-6 floating" />
-               <h3 className="text-7xl font-black tracking-tighter text-white mb-2">荣耀揭晓</h3>
+               <h3 className="text-7xl font-black tracking-tighter text-white mb-2">让我们恭喜这个混蛋🎉</h3>
                <p className="text-xl text-gray-400 font-medium">恭喜获得 <span className="text-brand-primary font-black uppercase tracking-widest">{currentPrize?.name}</span></p>
             </div>
             <div className="flex flex-wrap justify-center gap-6 mb-12 max-h-[40vh] overflow-y-auto custom-scrollbar">

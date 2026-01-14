@@ -21,8 +21,11 @@ export const Layout: React.FC<LayoutProps> = ({ currentPage, onNavigate, childre
 
   return (
     <div className="flex flex-col h-screen hero-gradient overflow-hidden selection:bg-brand-primary/30 relative">
-      {/* Cinematic Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 px-12 py-4 flex justify-between items-center pointer-events-none">
+      {/* Cinematic Header - Optimized for zero-seam blending */}
+      <header className="fixed top-0 left-0 right-0 z-50 px-12 py-6 flex justify-between items-center pointer-events-none">
+        {/* Background Blur Gradient to hide the seam */}
+        <div className="absolute inset-0 bg-gradient-to-b from-brand-surface via-brand-surface/80 to-transparent h-40 pointer-events-none -z-10"></div>
+        
         <div className="flex items-center gap-4 pointer-events-auto">
           <div className="p-2 bg-brand-primary/10 rounded-xl border border-brand-primary/20 backdrop-blur-md overflow-hidden flex items-center justify-center min-w-[40px] min-h-[40px]">
             {siteConfig.logoUrl ? (
@@ -65,14 +68,14 @@ export const Layout: React.FC<LayoutProps> = ({ currentPage, onNavigate, childre
         </div>
       </header>
 
-      {/* Main Stage */}
-      <main className="flex-1 relative z-10 pt-16 pb-24 px-8 overflow-hidden">
+      {/* Main Stage - Increased pt-20 to move content down */}
+      <main className="flex-1 relative z-10 pt-20 pb-24 px-8 overflow-hidden">
         <div className="max-w-[1400px] mx-auto h-full animate-fade-in relative scale-adaptive">
           {children}
         </div>
       </main>
 
-      {/* Floating Minimal Dock - Moved to Bottom Right */}
+      {/* Floating Minimal Dock */}
       <div className="fixed bottom-8 right-12 z-50">
         <nav className="flex items-center gap-2 p-2 bg-black/60 backdrop-blur-3xl rounded-full border border-white/10 shadow-2xl">
           {navItems.map((item) => {
