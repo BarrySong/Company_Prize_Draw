@@ -61,7 +61,6 @@ export const LotteryMachine: React.FC<LotteryMachineProps> = ({
 
   const hasPrizes = prizes && prizes.length > 0;
 
-  // Added default value 0 for offset to satisfy argument requirement
   const getPrizeAt = (offset: number = 0) => {
     if (!hasPrizes) return null;
     const index = (activePrizeIndex + offset + prizes.length) % prizes.length;
@@ -206,7 +205,6 @@ export const LotteryMachine: React.FC<LotteryMachineProps> = ({
   const navigatePrize = (direction: number) => {
     if (isRunning || !hasPrizes) return;
     initAudio();
-    // Added 'select' as required argument for playSound
     playSound('select');
     setActivePrizeIndex(prev => (prev + direction + prizes.length) % prizes.length);
   };
@@ -399,7 +397,8 @@ export const LotteryMachine: React.FC<LotteryMachineProps> = ({
         )}
       </div>
 
-      <div className={`fixed bottom-28 right-12 transition-all duration-1000 ${isRunning ? 'translate-y-40 opacity-0' : 'translate-y-0 opacity-100'}`}>
+      {/* FIXED: AI PRECISION 2.5 label positioned further left-bottom, aligned with dock bottom edge */}
+      <div className={`fixed bottom-11 left-12 transition-all duration-1000 ${isRunning ? 'translate-y-40 opacity-0' : 'translate-y-0 opacity-100'}`}>
           <div className="flex items-center gap-3 text-white/10 text-[10px] font-black uppercase tracking-[0.5em]">
              <Zap size={12} className="text-brand-accent animate-pulse" />
              AI PRECISION 2.5
