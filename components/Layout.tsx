@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { Users, Gift, Trophy, MonitorPlay, Command, Sparkles, User, Settings } from 'lucide-react';
+import { Users, Gift, Trophy, MonitorPlay, Command, Sparkles, User, Settings, Cloud, CloudOff, Loader2 } from 'lucide-react';
 import { PageView, SiteConfig } from '../types';
 
 interface LayoutProps {
@@ -8,9 +9,10 @@ interface LayoutProps {
   children: React.ReactNode;
   poolSize?: number;
   siteConfig: SiteConfig;
+  dbStatus: 'connecting' | 'online' | 'offline';
 }
 
-export const Layout: React.FC<LayoutProps> = ({ currentPage, onNavigate, children, poolSize = 0, siteConfig }) => {
+export const Layout: React.FC<LayoutProps> = ({ currentPage, onNavigate, children, poolSize = 0, siteConfig, dbStatus }) => {
   const navItems = [
     { id: 'lottery', label: '大厅', icon: MonitorPlay },
     { id: 'participants', label: '人员', icon: Users },
@@ -19,15 +21,23 @@ export const Layout: React.FC<LayoutProps> = ({ currentPage, onNavigate, childre
     { id: 'settings', label: '设置', icon: Settings },
   ];
 
+  const getStatusConfig = () => {
+    switch(dbStatus) {
+      case 'online': return { color: 'text-brand-accent', label: 'Synced', icon: Cloud, bg: 'bg-brand-accent/10', border: 'border-brand-accent/30' };
+      case 'offline': return { color: 'text-red-500', label: 'Local', icon: CloudOff, bg: 'bg-red-500/10', border: 'border-red-500/30' };
+      default: return { color: 'text-yellow-500', label: 'Link...', icon: Loader2, bg: 'bg-yellow-500/10', border: 'border-yellow-500/30' };
+    }
+  };
+
+  const status = getStatusConfig();
+
   return (
     <div className="flex flex-col h-screen hero-gradient overflow-hidden selection:bg-brand-primary/30 relative">
-      {/* Cinematic Header - Optimized for zero-seam blending */}
       <header className="fixed top-0 left-0 right-0 z-50 px-12 py-6 flex justify-between items-center pointer-events-none">
-        {/* Background Blur Gradient to hide the seam */}
         <div className="absolute inset-0 bg-gradient-to-b from-brand-surface via-brand-surface/80 to-transparent h-40 pointer-events-none -z-10"></div>
         
         <div className="flex items-center gap-4 pointer-events-auto">
-          <div className="p-2 bg-brand-primary/10 rounded-xl border border-brand-primary/20 backdrop-blur-md overflow-hidden flex items-center justify-center min-w-[40px] min-h-[40px]">
+          <div className="p-2 bg-brand-primary/10 rounded-xl border border-brand-primary/20 backdrop-blur-md flex items-center justify-center min-w-[40px] min-h-[40px]">
             {siteConfig.logoUrl ? (
               <img src={siteConfig.logoUrl} alt="logo" className="w-8 h-8 object-contain" />
             ) : (
@@ -56,26 +66,24 @@ export const Layout: React.FC<LayoutProps> = ({ currentPage, onNavigate, childre
             </div>
           )}
 
-          <div className="flex items-center gap-3 px-3 py-1.5 bg-white/5 backdrop-blur-2xl rounded-xl border border-white/5 group hover:bg-white/10 transition-all shadow-lg">
+          <div className={`flex items-center gap-3 px-3 py-1.5 bg-white/5 backdrop-blur-2xl rounded-xl border ${status.border} transition-all shadow-lg group`}>
             <div className="text-right">
-              <div className="text-[9px] font-black text-gray-400 uppercase tracking-tighter">系统状态</div>
-              <div className="text-[11px] text-brand-accent font-extrabold leading-none uppercase">Online</div>
+              <div className="text-[9px] font-black text-gray-400 uppercase tracking-tighter">CypressCloud</div>
+              <div className={`text-[11px] ${status.color} font-extrabold leading-none uppercase`}>{status.label}</div>
             </div>
-            <div className="w-7 h-7 rounded-lg border border-brand-accent/30 flex items-center justify-center bg-brand-accent/10 group-hover:scale-110 transition-transform">
-              <Sparkles className="text-brand-accent" size={12} />
+            <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${status.bg} group-hover:scale-110 transition-transform`}>
+              <status.icon className={`${status.color} ${dbStatus === 'connecting' ? 'animate-spin' : ''}`} size={14} />
             </div>
           </div>
         </div>
       </header>
 
-      {/* Main Stage - Increased pt-20 to move content down */}
       <main className="flex-1 relative z-10 pt-20 pb-24 px-8 overflow-hidden">
         <div className="max-w-[1400px] mx-auto h-full animate-fade-in relative scale-adaptive">
           {children}
         </div>
       </main>
 
-      {/* Floating Minimal Dock */}
       <div className="fixed bottom-8 right-12 z-50">
         <nav className="flex items-center gap-2 p-2 bg-black/60 backdrop-blur-3xl rounded-full border border-white/10 shadow-2xl">
           {navItems.map((item) => {
