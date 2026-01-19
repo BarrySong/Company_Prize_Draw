@@ -7,7 +7,7 @@ import { PrizeManager } from './components/PrizeManager';
 import { HistoryBoard } from './components/HistoryBoard';
 import { SettingsManager } from './components/SettingsManager';
 import { db } from './utils/firebase';
-import { ref, onValue, set, update } from 'firebase/database';
+import { ref, onValue, set, update, goOnline, goOffline } from 'firebase/database';
 import { AppState, PageView, Participant, Prize, Winner, SiteConfig } from './types';
 
 const INITIAL_PRIZES: Prize[] = [
@@ -20,7 +20,6 @@ function App() {
   const [currentPage, setCurrentPage] = useState<PageView>('lottery');
   const [dbStatus, setDbStatus] = useState<'connecting' | 'online' | 'offline'>('connecting');
   
-  // Global State - No more initial load from storage.ts
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [prizes, setPrizes] = useState<Prize[]>(INITIAL_PRIZES);
   const [winners, setWinners] = useState<Winner[]>([]);
@@ -30,28 +29,33 @@ function App() {
     logoUrl: '' 
   });
 
-  // 1. Firebase 实时监听与后台同步
   useEffect(() => {
+    // 强制尝试连接
+    goOnline(db);
+
     const dataRef = ref(db, 'lottery_app');
     const connectedRef = ref(db, '.info/connected');
 
-    // 监听连接状态
-    onValue(connectedRef, (snap) => {
+    // 监听 Firebase 特有的连接状态节点
+    const unsubConnected = onValue(connectedRef, (snap) => {
       if (snap.val() === true) {
         setDbStatus('online');
       } else {
-        setDbStatus('offline');
+        // Firebase 可能会短暂断开，如果是初始状态则保持 connecting
+        setDbStatus(prev => prev === 'connecting' ? 'connecting' : 'offline');
       }
     });
 
     // 监听数据变化
-    const unsubscribe = onValue(dataRef, (snapshot) => {
+    const unsubData = onValue(dataRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
         setParticipants(data.participants || []);
         setPrizes(data.prizes || INITIAL_PRIZES);
         setWinners(data.winners || []);
-        setSiteConfig(data.siteConfig || { brandName: 'CYPRESSTEL', eventName: 'Annual Gala 2025' });
+        setSiteConfig(data.siteConfig || { brandName: 'CYPRESSTEL', eventName: 'Annual Gala 2025', logoUrl: data.siteConfig?.logoUrl || '' });
+        // 如果数据成功下载，说明网络至少通了一次
+        setDbStatus('online');
       } else {
         // 初始化云端数据
         set(dataRef, {
@@ -66,7 +70,10 @@ function App() {
       setDbStatus('offline');
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubConnected();
+      unsubData();
+    };
   }, []);
 
   const syncToCloud = (updates: Partial<AppState>) => {
